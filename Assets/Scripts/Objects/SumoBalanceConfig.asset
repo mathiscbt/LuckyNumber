@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e10c7aaf5f1d486283543f0e7e709a9, type: 3}
+  m_Name: SumoBalanceConfig
+  m_EditorClassIdentifier: Assembly-CSharp::SumoBalanceConfig
+  minMass: 1
+  minScale: 0.5
+  minDrag: 1
+  highMoveForce: 20
+  highMaxSpeed: 10
+  shortCooldown: 0.2
+  maxMass: 9
+  maxScale: 2.5
+  maxDrag: 5
+  lowMoveForce: 5
+  lowMaxSpeed: 3
+  longCooldown: 2
+  dashForce: 15
