@@ -3,50 +3,47 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SumoBalanceConfig", menuName = "ScriptableObjects/SumoBalanceConfig")]
 public class SumoBalanceConfig : ScriptableObject
 {
-    [Header("For number 1")]
-    public float minMass = 1f;
-    public float minScale = 0.5f;
-    public float minDrag = 1f;
-    public float highMoveForce = 20f;
-    public float highMaxSpeed = 10f;
-    public float shortCooldown = 0.2f;
-    public float minDashWindupTime = 0.1f;
-    public float minDashDuration = 0.2f;
+    [Header("Data 1")]
+    public float _1mass = 1f;
+    public float _1scale = 0.7f;
+    public float _1drag = 2f;
+    public float _1moveForce = 25f;
+    public float _1maxSpeed = 9f;
+    public float _1cooldown = 0.5f;
+    public float _1dashWindupTime = 0.05f;
+    public float _1dashDuration = 0.15f;
+    public float _1dashForce = 12f;
 
-    [Header("For number 9")]
-    public float maxMass = 9f;
-    public float maxScale = 2.5f;
-    public float maxDrag = 5f;
-    public float lowMoveForce = 5f;
-    public float lowMaxSpeed = 3f;
-    public float longCooldown = 2.0f;
-    public float maxDashWindupTime = 1f;
-    public float maxDashDuration = 0.5f;
-
-    [Header("Global")]
-    public float dashForce = 15f;
+    [Header("Data 9")]
+    public float _9mass = 5f;
+    public float _9scale = 1.8f;
+    public float _9drag = 1f;
+    public float _9moveForce = 60f;
+    public float _9maxSpeed = 4f;
+    public float _9cooldown = 2.0f;
+    public float _9dashWindupTime = 0.35f;
+    public float _9dashDuration = 0.35f;
+    public float _9dashForce = 75f;
 
     public SumoData GenerateDataForNumber(int number)
     {
         number = Mathf.Clamp(number, 1, 9);
-
-
         float t = (number - 1f) / 8f;
 
         SumoData data = new SumoData();
         data.luckyNumber = number;
         
-        data.mass = Mathf.Lerp(minMass, maxMass, t);
-        data.scale = Mathf.Lerp(minScale, maxScale, t);
-        data.drag = Mathf.Lerp(minDrag, maxDrag, t);
-        data.dashWindupTime = Mathf.Lerp(minDashWindupTime, maxDashWindupTime, t);
-        data.dashDuration = Mathf.Lerp(minDashDuration, maxDashDuration, t);
+        data.mass = Mathf.Lerp(_1mass, _9mass, t);
+        data.scale = Mathf.Lerp(_1scale, _9scale, t);
+        data.drag = Mathf.Lerp(_1drag, _9drag, t);
+        
+        data.moveForce = Mathf.Lerp(_1moveForce, _9moveForce, t);
+        data.maxSpeed = Mathf.Lerp(_1maxSpeed, _9maxSpeed, t);
+        data.cooldown = Mathf.Lerp(_1cooldown, _9cooldown, t);
 
-        data.moveForce = Mathf.Lerp(highMoveForce, lowMoveForce, t);
-        data.maxSpeed = Mathf.Lerp(highMaxSpeed, lowMaxSpeed, t);
-        data.cooldown = Mathf.Lerp(shortCooldown, longCooldown, t);
-
-        data.dashForce = dashForce; 
+        data.dashWindupTime = Mathf.Lerp(_1dashWindupTime, _9dashWindupTime, t);
+        data.dashDuration = Mathf.Lerp(_1dashDuration, _9dashDuration, t);
+        data.dashForce = Mathf.Lerp(_1dashForce, _9dashForce, t);
 
         return data;
     }

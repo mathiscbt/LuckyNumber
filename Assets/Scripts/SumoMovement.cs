@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -16,8 +17,11 @@ public class SumoMovement : MonoBehaviour
     private bool needsDashImpulse = false;
     private SumoData sumoData;
     private bool ready = false;
+    private bool isStunned = false;
 
     public event Action<GameObject> OnEliminated;
+    public bool IsDashing => currentState == SumoState.Dashing;
+    public SumoData SumoData => sumoData;
 
     void Awake()
     {
@@ -26,7 +30,7 @@ public class SumoMovement : MonoBehaviour
 
     public void SetMovementInput(Vector2 input)
     {
-        if (!ready) return;
+        if (!ready || isStunned) return;
         movementInput = input;
         if (input.sqrMagnitude > 0.01f)
         {
@@ -36,7 +40,7 @@ public class SumoMovement : MonoBehaviour
 
     public void TryDash()
     {
-        if (!ready) return;
+        if (!ready || isStunned) return;
         if (dashCooldown > 0f) return;
         if (currentState != SumoState.Normal) return;
 
@@ -45,6 +49,22 @@ public class SumoMovement : MonoBehaviour
         dashCooldown = sumoData.cooldown;
 
         rb.linearVelocity = Vector2.zero;
+    }
+
+    public void SetStunned(bool stunned)
+    {
+        isStunned = stunned;
+        
+        if (isStunned)
+        {
+            currentState = SumoState.Normal;
+            rb.mass = 1f; 
+            rb.linearDamping = 0.5f;
+        }
+        else
+        {
+            RefreshData();
+        }
     }
 
     private void SetSumoData(SumoData data)
@@ -68,7 +88,7 @@ public class SumoMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!ready) return;
+        if (!ready || isStunned) return;
 
         if (dashCooldown > 0f)
         {
@@ -101,7 +121,7 @@ public class SumoMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!ready) return;
+        if (!ready || isStunned) return;
 
         if (currentState == SumoState.Dashing)
         {

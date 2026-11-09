@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2999831083678208260}
   - component: {fileID: 7479876458309890310}
   - component: {fileID: 387736656439624644}
+  - component: {fileID: 6893871360475391862}
   m_Layer: 0
   m_Name: Sumo
   m_TagString: Sumo
@@ -169,3 +170,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &6893871360475391862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312625954393773784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f9cd901b39e64fbab5608e0b0d7028d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SumoHealth
+  maxHealth: 100
+  stunDuration: 1
+  baseDashDamage: 25
