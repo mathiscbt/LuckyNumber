@@ -1,5 +1,5 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -12,16 +12,19 @@ public class SumoMovement : MonoBehaviour
     private enum SumoState { Normal, Windup, Dashing };
     private SumoState currentState = SumoState.Normal;
     private float dashCooldown = 0f;
+    public float GetDashCooldownNormalized() => (SumoData == null || SumoData.cooldown <= 0f)? 0f : Mathf.Clamp01(dashCooldown / SumoData.cooldown);
     private float windupTimer = 0f;
     private float dashTimer = 0f;
     private bool needsDashImpulse = false;
-    private SumoData sumoData;
+    private List<GameObject> hitByDash = new List<GameObject>();
+    [SerializeField] private float baseDashDamage = 25f;
     private bool ready = false;
     private bool isStunned = false;
+    
 
     public event Action<GameObject> OnEliminated;
     public bool IsDashing => currentState == SumoState.Dashing;
-    public SumoData SumoData => sumoData;
+    public SumoData SumoData {get; private set;}
 
     void Awake()
     {
@@ -45,8 +48,8 @@ public class SumoMovement : MonoBehaviour
         if (currentState != SumoState.Normal) return;
 
         currentState = SumoState.Windup;
-        windupTimer = sumoData.dashWindupTime;
-        dashCooldown = sumoData.cooldown;
+        windupTimer = SumoData.dashWindupTime;
+        dashCooldown = SumoData.cooldown;
 
         rb.linearVelocity = Vector2.zero;
     }
@@ -59,7 +62,7 @@ public class SumoMovement : MonoBehaviour
         {
             currentState = SumoState.Normal;
             rb.mass = 1f; 
-            rb.linearDamping = 0.5f;
+            rb.linearDamping = 1f;
         }
         else
         {
@@ -69,21 +72,21 @@ public class SumoMovement : MonoBehaviour
 
     private void SetSumoData(SumoData data)
     {
-        sumoData = data;
+        SumoData = data;
     }
 
     public void Initialize(SumoData data)
     {
-        sumoData = data;
+        SumoData = data;
         RefreshData();
         ready = true;
     }
 
     private void RefreshData()
     {
-        rb.mass = sumoData.mass;
-        rb.linearDamping = sumoData.drag;
-        transform.localScale = Vector3.one * sumoData.scale;
+        rb.mass = SumoData.mass;
+        rb.linearDamping = SumoData.drag;
+        transform.localScale = Vector3.one * SumoData.scale;
     }
 
     private void Update()
@@ -103,8 +106,9 @@ public class SumoMovement : MonoBehaviour
                 if (windupTimer <= 0f)
                 {
                     currentState = SumoState.Dashing;
-                    dashTimer = sumoData.dashDuration;
+                    dashTimer = SumoData.dashDuration;
                     needsDashImpulse = true;
+                    hitByDash.Clear();
                 }
             }
             else if (currentState == SumoState.Dashing)
@@ -123,11 +127,19 @@ public class SumoMovement : MonoBehaviour
     {
         if (!ready || isStunned) return;
 
+        Vector2 targetDirection = movementInput.sqrMagnitude > 0.01f ? movementInput : lastMovementInput;
+
+        if (targetDirection.sqrMagnitude > 0.01f)
+        {
+            float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+            rb.MoveRotation(angle);
+        }
+
         if (currentState == SumoState.Dashing)
         {
             if (needsDashImpulse)
             {
-                rb.AddForce(lastMovementInput * sumoData.dashForce, ForceMode2D.Impulse);
+                rb.AddForce(lastMovementInput * SumoData.dashForce, ForceMode2D.Impulse);
                 needsDashImpulse = false;
             }
             return;
@@ -138,15 +150,35 @@ public class SumoMovement : MonoBehaviour
         }
         else if (currentState == SumoState.Normal)
         {
-            rb.AddForce(movementInput * sumoData.moveForce, ForceMode2D.Force);
+            rb.AddForce(movementInput * SumoData.moveForce, ForceMode2D.Force);
 
-            if (rb.linearVelocity.magnitude > sumoData.maxSpeed)
+            if (rb.linearVelocity.magnitude > SumoData.maxSpeed)
             {
-                rb.linearVelocity = rb.linearVelocity.normalized * sumoData.maxSpeed;
+                rb.linearVelocity = rb.linearVelocity.normalized * SumoData.maxSpeed;
             }
         }
 
     }
+
+    private void TryAttackVictim(GameObject target)
+    {
+        if (!IsDashing || hitByDash.Contains(target)) return;
+
+        SumoHealth victimHealth = target.GetComponent<SumoHealth>();
+        SumoMovement victimMovement = target.GetComponent<SumoMovement>();
+
+        if (victimHealth != null && victimMovement != null)
+        {
+            float massRatio = Mathf.Sqrt(SumoData.mass / victimMovement.SumoData.mass);
+            float damage = baseDashDamage * massRatio;
+
+            victimHealth.TakeDamage(damage);
+            hitByDash.Add(target);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) => TryAttackVictim(collision.gameObject);
+    private void OnCollisionStay2D(Collision2D collision) => TryAttackVictim(collision.gameObject);
 
     public void Eliminate()
     {

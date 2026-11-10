@@ -13,6 +13,7 @@ public class SumoBalanceConfig : ScriptableObject
     public float _1dashWindupTime = 0.05f;
     public float _1dashDuration = 0.15f;
     public float _1dashForce = 12f;
+    public float _1stunDuration = 1f;
 
     [Header("Data 9")]
     public float _9mass = 5f;
@@ -24,6 +25,7 @@ public class SumoBalanceConfig : ScriptableObject
     public float _9dashWindupTime = 0.35f;
     public float _9dashDuration = 0.35f;
     public float _9dashForce = 75f;
+    public float _9stunDuration = 3f;
 
     public SumoData GenerateDataForNumber(int number)
     {
@@ -44,6 +46,8 @@ public class SumoBalanceConfig : ScriptableObject
         data.dashWindupTime = Mathf.Lerp(_1dashWindupTime, _9dashWindupTime, t);
         data.dashDuration = Mathf.Lerp(_1dashDuration, _9dashDuration, t);
         data.dashForce = Mathf.Lerp(_1dashForce, _9dashForce, t);
+
+        data.stunDuration = Mathf.Lerp(_1stunDuration,_9stunDuration,t);
 
         return data;
     }

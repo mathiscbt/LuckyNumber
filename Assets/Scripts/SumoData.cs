@@ -12,4 +12,5 @@ public class SumoData
     public float maxSpeed;
     public float dashWindupTime;
     public float dashDuration;
+    public float stunDuration;
 }

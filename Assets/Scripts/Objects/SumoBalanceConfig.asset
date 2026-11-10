@@ -21,7 +21,8 @@ MonoBehaviour:
   _1dashWindupTime: 0.05
   _1dashDuration: 0.15
   _1dashForce: 20
-  _9mass: 10
+  _1stunDuration: 1
+  _9mass: 5
   _9scale: 1.8
   _9drag: 1
   _9moveForce: 60
@@ -30,3 +31,4 @@ MonoBehaviour:
   _9dashWindupTime: 0.35
   _9dashDuration: 0.35
   _9dashForce: 75
+  _9stunDuration: 3

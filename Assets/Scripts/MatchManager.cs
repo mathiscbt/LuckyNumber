@@ -6,6 +6,9 @@ public class MatchManager : MonoBehaviour
     [SerializeField] private SumoBalanceConfig balanceConfig;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject aiPrefab;
+    [SerializeField] private Collider2D areaCollider;
+    
+
     private List<SumoMovement> followedSumos = new List<SumoMovement>();    
 
 
@@ -27,6 +30,7 @@ public class MatchManager : MonoBehaviour
 
         AiAction aiAction = sumoInstance.GetComponent<AiAction>();
         aiAction.SetTarget(sumoInstancePlayer.transform);
+        aiAction.SetAreaData(areaCollider);
     }
 
     public void EndGame()

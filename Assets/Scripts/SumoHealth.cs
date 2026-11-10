@@ -6,10 +6,19 @@ public class SumoHealth : MonoBehaviour
 {
     [Header("Health & Stun Settings")]
     [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float stunDuration = 2.0f;
-    [SerializeField] private float baseDashDamage = 25f;
+    private float stunDuration;
 
     private float currentHealth;
+    public float CurrentHealth {
+        get => currentHealth; 
+        private set
+        {
+            currentHealth = Mathf.Clamp(value, 0f, maxHealth);
+            OnHealthPercentChange?.Invoke(Mathf.Clamp01(value/maxHealth));
+        }
+    }
+
+    public float MyValue { get; set; }
     private float stunTimer = 0f;
     private bool isStunned = false;
 
@@ -17,15 +26,22 @@ public class SumoHealth : MonoBehaviour
 
     public event Action<GameObject> OnStunned; // Pour plus tard
     public event Action<GameObject> OnRecovered;  // Pour plus tard
+    public event Action<float> OnHealthPercentChange;
 
     public bool IsStunned => isStunned;
-    public float CurrentHealth => currentHealth;
+    
 
     private void Awake()
     {
         sumoMovement = GetComponent<SumoMovement>();
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
     }
+    
+    void Start()
+    {
+        stunDuration = sumoMovement.SumoData.stunDuration;
+    }
+
 
     private void Update()
     {
@@ -39,33 +55,15 @@ public class SumoHealth : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isStunned) return;
-
-        SumoMovement attacker = collision.gameObject.GetComponent<SumoMovement>();
-        if (attacker == null) return;
-
-        if (attacker.IsDashing)
-        {
-            float attackerMass = attacker.SumoData.mass;
-            float victimMass = sumoMovement.SumoData.mass;
-
-            float massRatio = attackerMass / victimMass;
-            float finalDamage = baseDashDamage * massRatio;
-
-            TakeDamage(finalDamage);
-        }
-    }
 
     public void TakeDamage(float amount)
     {
         if (isStunned) return;
 
-        currentHealth -= amount;
-        Debug.Log(currentHealth);
+        CurrentHealth -= amount;
+        Debug.Log(CurrentHealth);
 
-        if (currentHealth <= 0f)
+        if (CurrentHealth <= 0f)
         {
             Stun();
         }
@@ -83,7 +81,7 @@ public class SumoHealth : MonoBehaviour
     private void RecoverFromStun()
     {
         isStunned = false;
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
 
         sumoMovement.SetStunned(false);
         OnRecovered?.Invoke(gameObject);
