@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: SumoBalanceConfig
   m_EditorClassIdentifier: Assembly-CSharp::SumoBalanceConfig
   _1mass: 1
-  _1scale: 0.5
+  _1scale: 1.5
   _1drag: 2
   _1moveForce: 25
-  _1maxSpeed: 50
-  _1cooldown: 0.5
-  _1dashWindupTime: 0.05
-  _1dashDuration: 0.15
-  _1dashForce: 20
+  _1maxSpeed: 20
+  _1cooldown: 0.8
+  _1dashWindupTime: 0.1
+  _1dashDuration: 0.2
+  _1dashForce: 15
   _1stunDuration: 1
   _9mass: 5
-  _9scale: 1.8
+  _9scale: 2.5
   _9drag: 1
   _9moveForce: 60
   _9maxSpeed: 1
-  _9cooldown: 2
-  _9dashWindupTime: 0.35
+  _9cooldown: 3
+  _9dashWindupTime: 1
   _9dashDuration: 0.35
   _9dashForce: 75
   _9stunDuration: 3

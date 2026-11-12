@@ -9,6 +9,7 @@ public class SumoMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movementInput;
     private Vector2 lastMovementInput = Vector2.up;
+    public Vector2 Facing => lastMovementInput;
     private enum SumoState { Normal, Windup, Dashing };
     private SumoState currentState = SumoState.Normal;
     private float dashCooldown = 0f;
@@ -20,10 +21,14 @@ public class SumoMovement : MonoBehaviour
     [SerializeField] private float baseDashDamage = 25f;
     private bool ready = false;
     private bool isStunned = false;
-    
+    [SerializeField] private float rotationSpeed = 10f;
 
     public event Action<GameObject> OnEliminated;
     public bool IsDashing => currentState == SumoState.Dashing;
+    public event Action StartWindup;
+    public event Action StartDashing;
+    public event Action EndDashing;
+    public event Action<float> OnScaleChange;
     public SumoData SumoData {get; private set;}
 
     void Awake()
@@ -35,7 +40,7 @@ public class SumoMovement : MonoBehaviour
     {
         if (!ready || isStunned) return;
         movementInput = input;
-        if (input.sqrMagnitude > 0.01f)
+        if (currentState == SumoState.Normal && input.sqrMagnitude > 0.01f)
         {
             lastMovementInput = input.normalized;
         }
@@ -47,11 +52,18 @@ public class SumoMovement : MonoBehaviour
         if (dashCooldown > 0f) return;
         if (currentState != SumoState.Normal) return;
 
+        if (movementInput.sqrMagnitude > 0.01f)
+        {
+            lastMovementInput = movementInput.normalized;
+        }
+
         currentState = SumoState.Windup;
+        StartWindup?.Invoke();
         windupTimer = SumoData.dashWindupTime;
         dashCooldown = SumoData.cooldown;
 
         rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
 
     public void SetStunned(bool stunned)
@@ -77,6 +89,7 @@ public class SumoMovement : MonoBehaviour
 
     public void Initialize(SumoData data)
     {
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
         SumoData = data;
         RefreshData();
         ready = true;
@@ -87,6 +100,7 @@ public class SumoMovement : MonoBehaviour
         rb.mass = SumoData.mass;
         rb.linearDamping = SumoData.drag;
         transform.localScale = Vector3.one * SumoData.scale;
+        OnScaleChange?.Invoke(SumoData.scale);
     }
 
     private void Update()
@@ -109,6 +123,7 @@ public class SumoMovement : MonoBehaviour
                     dashTimer = SumoData.dashDuration;
                     needsDashImpulse = true;
                     hitByDash.Clear();
+                    StartDashing?.Invoke();
                 }
             }
             else if (currentState == SumoState.Dashing)
@@ -117,6 +132,7 @@ public class SumoMovement : MonoBehaviour
                 if (dashTimer <= 0f)
                 {
                     currentState = SumoState.Normal;
+                    EndDashing?.Invoke();
                 }
             }
         }
@@ -124,41 +140,37 @@ public class SumoMovement : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
-        if (!ready || isStunned) return;
+{
+    if (!ready || isStunned) return;
 
+    if (currentState == SumoState.Normal)
+    {
         Vector2 targetDirection = movementInput.sqrMagnitude > 0.01f ? movementInput : lastMovementInput;
 
         if (targetDirection.sqrMagnitude > 0.01f)
         {
-            float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-            rb.MoveRotation(angle);
+            float targetAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
+            float smoothedAngle = Mathf.LerpAngle(rb.rotation, targetAngle, rotationSpeed * Time.fixedDeltaTime);
+            rb.MoveRotation(smoothedAngle);
         }
 
-        if (currentState == SumoState.Dashing)
-        {
-            if (needsDashImpulse)
-            {
-                rb.AddForce(lastMovementInput * SumoData.dashForce, ForceMode2D.Impulse);
-                needsDashImpulse = false;
-            }
-            return;
-        }
-        else if (currentState == SumoState.Windup)
-        {
-            return;
-        }
-        else if (currentState == SumoState.Normal)
-        {
-            rb.AddForce(movementInput * SumoData.moveForce, ForceMode2D.Force);
+        rb.AddForce(movementInput * SumoData.moveForce, ForceMode2D.Force);
 
-            if (rb.linearVelocity.magnitude > SumoData.maxSpeed)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * SumoData.maxSpeed;
-            }
+        if (rb.linearVelocity.magnitude > SumoData.maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * SumoData.maxSpeed;
         }
-
     }
+    else if (currentState == SumoState.Dashing)
+    {
+        if (needsDashImpulse)
+        {
+            rb.AddForce(lastMovementInput * SumoData.dashForce, ForceMode2D.Impulse);
+            needsDashImpulse = false;
+        }
+    }
+
+}
 
     private void TryAttackVictim(GameObject target)
     {
@@ -185,6 +197,24 @@ public class SumoMovement : MonoBehaviour
         OnEliminated?.Invoke(gameObject);
         rb.linearVelocity = Vector2.zero;
         ready = false;
+        SumoCamera.Instance?.RemoveTarget(transform);
         //Destroy(gameObject);
+    }
+
+    public void ResetState()
+    {
+        currentState = SumoState.Normal;
+        dashCooldown = 0f;
+        windupTimer = 0f;
+        dashTimer = 0f;
+        needsDashImpulse = false;
+        hitByDash.Clear();
+        movementInput = Vector2.zero;
+        lastMovementInput = Vector2.right;
+        isStunned = false;
+        ready = true;
+        RefreshData();
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
 }

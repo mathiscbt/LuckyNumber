@@ -17,6 +17,7 @@ public class SumoHealth : MonoBehaviour
             OnHealthPercentChange?.Invoke(Mathf.Clamp01(value/maxHealth));
         }
     }
+    public float HealthPercent => currentHealth / maxHealth;
 
     public float MyValue { get; set; }
     private float stunTimer = 0f;
@@ -27,6 +28,7 @@ public class SumoHealth : MonoBehaviour
     public event Action<GameObject> OnStunned; // Pour plus tard
     public event Action<GameObject> OnRecovered;  // Pour plus tard
     public event Action<float> OnHealthPercentChange;
+    public event Action<float> OnHit;
 
     public bool IsStunned => isStunned;
     
@@ -61,7 +63,7 @@ public class SumoHealth : MonoBehaviour
         if (isStunned) return;
 
         CurrentHealth -= amount;
-        Debug.Log(CurrentHealth);
+        OnHit?.Invoke(amount);
 
         if (CurrentHealth <= 0f)
         {
@@ -85,5 +87,12 @@ public class SumoHealth : MonoBehaviour
 
         sumoMovement.SetStunned(false);
         OnRecovered?.Invoke(gameObject);
+    }
+
+    public void ResetState()
+    {
+        stunTimer = 0f;
+        isStunned = false;
+        CurrentHealth = maxHealth;
     }
 }
