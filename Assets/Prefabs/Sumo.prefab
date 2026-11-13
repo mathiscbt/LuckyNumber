@@ -767,6 +767,9 @@ MonoBehaviour:
   - {fileID: 2121784020527745300}
   - {fileID: 3257464414419453836}
   - {fileID: 2371122721680968791}
+  changingColorSprites:
+  - {fileID: 2121784020527745300}
+  - {fileID: 2371122721680968791}
   animator: {fileID: 1850622181079936349}
   visualsRoot: {fileID: 6169484487259316895}
   ghostColor: {r: 1, g: 1, b: 1, a: 0.45}

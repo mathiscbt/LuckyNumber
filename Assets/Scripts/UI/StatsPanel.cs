@@ -9,38 +9,37 @@ public class StatsPanel : UIPanel
     [SerializeField] private TMP_Text playerStats;
     [SerializeField] private TMP_Text opponentStats;
 
-    private static readonly List<(string label, Func<SumoData, float> getter)> StatDefs = new List<(string, Func<SumoData, float>)>
+    private static readonly string[] StatLabels =
     {
-        ("Masse", d => d.mass),
-        ("Vitesse", d => d.maxSpeed),
-        ("Dash cooldown", d => d.cooldown),
-        // TODO: liste des stats affichées
+        "Weight",
+        "Speed",
+        "Dash cooldown",
     };
 
     private Action onFight;
 
-    public void Display(SumoSetup player, SumoData playerData, List<SumoSetup> opponents, List<SumoData> opponentsData, Action onFightCallback)
+    public void Display(SumoSetup player, List<SumoSetup> opponents, Action onFightCallback)
     {
         onFight = onFightCallback;
-        playerStats.text = Describe(player, playerData);
+        playerStats.text = Describe(player);
 
         StringBuilder opponentText = new StringBuilder();
-        for (int i = 0; i < opponents.Count; i++)
+        foreach (SumoSetup opponent in opponents)
         {
-            opponentText.Append(Describe(opponents[i], opponentsData[i])).AppendLine();
+            opponentText.Append(Describe(opponent)).AppendLine();
         }
         opponentStats.text = opponentText.ToString();
     }
 
     public void OnClickFight() => onFight?.Invoke();
 
-    private static string Describe(SumoSetup setup, SumoData data)
+    private static string Describe(SumoSetup setup)
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Lucky number : {setup.luckyNumber}");
-        foreach (var (label, getter) in StatDefs)
+        sb.AppendLine($"Lucky number: {setup.luckyNumber}");
+        foreach (string label in StatLabels)
         {
-            sb.AppendLine($"{label} : {getter(data):0.##}");
+            sb.AppendLine($"{label}: {setup.luckyNumber}");
         }
         return sb.ToString();
     }

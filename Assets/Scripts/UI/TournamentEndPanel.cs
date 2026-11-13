@@ -7,7 +7,7 @@ public class TournamentEndPanel : UIPanel
 
     public void Display(bool victory)
     {
-        titleLabel.text = victory ? "VICTOIRE" : "DÉFAITE";
+        titleLabel.text = victory ? "VICTORY" : "DEFEAT";
     }
 
     public void OnClickMenu() => GameFlowManager.Instance.BackToMenu();

@@ -8,7 +8,9 @@ public class SumoSetupPanel : MonoBehaviour
     [SerializeField] private Image colorPreview;
 
     private int luckyNumber;
-    private int colorIndex;
+    private int colorIndex = -1;
+
+    public bool IsComplete => luckyNumber != 0 && colorIndex >= 0;
 
     public void SelectLuckyNumber(int number)
     {
@@ -26,13 +28,13 @@ public class SumoSetupPanel : MonoBehaviour
 
     public SumoSetup Build(ControlScheme controls)
     {
-        if (luckyNumber == 0) return null;
+        if (!IsComplete) return null;
         return new SumoSetup(luckyNumber, GameFlowManager.Instance.Palette[colorIndex], false, controls);
     }
 
     private void Refresh()
     {
         if (luckyNumberLabel != null) luckyNumberLabel.text = luckyNumber == 0 ? "?" : luckyNumber.ToString();
-        if (colorPreview != null) colorPreview.color = GameFlowManager.Instance.Palette[colorIndex];
+        if (colorPreview != null && colorIndex >= 0) colorPreview.color = GameFlowManager.Instance.Palette[colorIndex];
     }
 }

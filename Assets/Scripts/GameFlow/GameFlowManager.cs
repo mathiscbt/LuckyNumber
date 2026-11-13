@@ -102,7 +102,6 @@ public class GameFlowManager : MonoBehaviour
 
     public void ContinueTournament()
     {
-        session.PrepareRound();
         ShowStats();
     }
 
@@ -115,10 +114,7 @@ public class GameFlowManager : MonoBehaviour
     {
         session.PrepareFight(palette);
 
-        List<SumoData> opponentData = session.FightOpponents.ConvertAll(opponent => matchManager.GetDataFor(opponent.luckyNumber));
-        SumoData playerData = matchManager.GetDataFor(session.Player.luckyNumber);
-
-        statsPanel.Display(session.Player, playerData, session.FightOpponents, opponentData, StartFight);
+        statsPanel.Display(session.Player, session.FightOpponents, StartFight);
         ShowOnly(statsPanel);
     }
 
@@ -132,7 +128,7 @@ public class GameFlowManager : MonoBehaviour
     {
         if (session.Mode == GameMode.LocalMulti)
         {
-            matchResultPanel.Display(playerSideWon ? "Joueur 1 gagne" : "Joueur 2 gagne");
+            matchResultPanel.Display(playerSideWon ? "Player 1 wins" : "Player 2 wins");
             ShowOnly(matchResultPanel);
             return;
         }
@@ -151,7 +147,7 @@ public class GameFlowManager : MonoBehaviour
         }
         else
         {
-            tournamentRoundPanel.Display(GameSession.NextRoundName(session.Participants.Count));
+            tournamentRoundPanel.Display(GameSession.RoundName(session.Round));
             ShowOnly(tournamentRoundPanel);
         }
     }

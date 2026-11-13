@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameSession
 {
+    public const int RoundCount = 5;
+
     public GameMode Mode { get; }
     public Difficulty Difficulty = Difficulty.Normal;
     public ControlScheme PlayerControls = ControlScheme.MouseAndSpace;
@@ -10,10 +12,11 @@ public class GameSession
     public SumoSetup SecondPlayer;
     public SumoSetup CurrentOpponent;
     public List<SumoSetup> FightOpponents { get; } = new List<SumoSetup>();
-    public List<SumoSetup> Participants { get; private set; } = new List<SumoSetup>();
+    public int Round { get; private set; }
     public bool PlayerEliminated { get; private set; }
+    public bool IsChampion => !PlayerEliminated && Round == RoundCount;
 
-    public bool IsChampion => !PlayerEliminated && Participants.Count == 1;
+    private readonly List<SumoSetup> tournamentOpponents = new List<SumoSetup>();
 
     public GameSession(GameMode mode)
     {
@@ -22,46 +25,36 @@ public class GameSession
 
     public void StartTournament(Color[] palette)
     {
-        Participants = new List<SumoSetup> { Player };
-        PlayerEliminated = false;
-
         List<int> numbers = new List<int>();
         for (int n = 1; n <= 9; n++)
         {
             if (n != Player.luckyNumber) numbers.Add(n);
         }
-        numbers.RemoveAt(Random.Range(0, numbers.Count));
+        Shuffle(numbers);
 
-        foreach (int number in numbers)
+        tournamentOpponents.Clear();
+        for (int i = 0; i < RoundCount; i++)
         {
-            Participants.Add(new SumoSetup(number, RandomColor(palette), true, ControlScheme.MouseAndSpace));
+            tournamentOpponents.Add(new SumoSetup(numbers[i], RandomAiColor(palette), true, ControlScheme.MouseAndSpace));
         }
 
+        Round = 0;
+        PlayerEliminated = false;
         PrepareRound();
     }
 
     public void PrepareRound()
     {
-        Shuffle(Participants);
-        int playerIndex = Participants.IndexOf(Player);
-        CurrentOpponent = Participants[playerIndex ^ 1];
+        CurrentOpponent = tournamentOpponents[Round];
     }
 
     public void ResolveRound(bool playerWon)
     {
         PlayerEliminated = !playerWon;
+        if (!playerWon) return;
 
-        List<SumoSetup> winners = new List<SumoSetup>();
-        for (int i = 0; i < Participants.Count; i += 2)
-        {
-            SumoSetup a = Participants[i];
-            SumoSetup b = Participants[i + 1];
-
-            if (a == Player || b == Player) winners.Add(playerWon ? Player : CurrentOpponent);
-            else winners.Add(Random.value < 0.5f ? a : b);
-        }
-
-        Participants = winners;
+        Round++;
+        if (Round < RoundCount) PrepareRound();
     }
 
     public void PrepareFight(Color[] palette)
@@ -80,21 +73,32 @@ public class GameSession
             return;
         }
 
+        Color groupColor = RandomAiColor(palette);
         for (int i = 0; i < Player.luckyNumber; i++)
         {
-            FightOpponents.Add(new SumoSetup(CurrentOpponent.luckyNumber, RandomColor(palette), true, ControlScheme.MouseAndSpace));
+            FightOpponents.Add(new SumoSetup(CurrentOpponent.luckyNumber, groupColor, true, ControlScheme.MouseAndSpace));
         }
     }
 
-    public static string NextRoundName(int poolSize) => poolSize switch
+    public static string RoundName(int round) => round switch
     {
-        8 => "Quarts de finale",
-        4 => "Demi-finales",
-        2 => "Finale",
-        _ => "Tour suivant"
+        0 => "1/16 finals",
+        1 => "1/8 finals",
+        2 => "1/4 finals",
+        3 => "Semi-finals",
+        _ => "Final"
     };
 
-    private static Color RandomColor(Color[] palette) => palette[Random.Range(0, palette.Length)];
+    private Color RandomAiColor(Color[] palette)
+    {
+        List<Color> options = new List<Color>();
+        foreach (Color color in palette)
+        {
+            if (color != Player.color) options.Add(color);
+        }
+
+        return options.Count == 0 ? palette[0] : options[Random.Range(0, options.Count)];
+    }
 
     private static void Shuffle<T>(IList<T> list)
     {

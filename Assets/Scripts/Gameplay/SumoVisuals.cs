@@ -11,6 +11,8 @@ public class SumoVisuals : MonoBehaviour
 
     [Header("Sprites & Flash")]
     [SerializeField] private SpriteRenderer[] sumoSprites;
+    [SerializeField] private SpriteRenderer[] changingColorSprites;
+
 
     private Coroutine flashCoroutine;
 
@@ -64,7 +66,10 @@ public class SumoVisuals : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        // TODO: appliquer la couleur aux sprites du sumo
+        foreach (SpriteRenderer sr in changingColorSprites)
+        {
+            sr.color = color;
+        }
     }
 
     private void Start()

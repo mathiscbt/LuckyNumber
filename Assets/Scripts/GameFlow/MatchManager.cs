@@ -11,7 +11,9 @@ public class MatchManager : MonoBehaviour
     [SerializeField] private Collider2D areaCollider;
     [SerializeField] private float teamSpacing = 1f;
     [SerializeField] private float leftTeamX = -2f;
-    [SerializeField] private float rightTeamX = 2f;
+    [SerializeField] private float arcRadius = 4f;
+    [SerializeField] private float arcAngle = 120f;
+    [SerializeField] private Vector3 arcCenter = new Vector3(-2f, 0f, 0f);
 
     private readonly Dictionary<SumoMovement, bool> aliveSumos = new Dictionary<SumoMovement, bool>();
     private readonly List<SumoMovement> spawned = new List<SumoMovement>();
@@ -26,8 +28,8 @@ public class MatchManager : MonoBehaviour
         EndGame();
         fightOver = false;
 
-        List<SumoMovement> left = SpawnTeam(leftTeam, leftTeamX, null, true);
-        SpawnTeam(rightTeam, rightTeamX, left[0].transform, false);
+        List<SumoMovement> left = SpawnTeam(leftTeam, null, true);
+        SpawnTeam(rightTeam, left[0].transform, false);
 
         SumoCamera.Instance?.SetTargets(spawned.Select(sumo => sumo.transform));
     }
@@ -46,17 +48,29 @@ public class MatchManager : MonoBehaviour
         SumoCamera.Instance?.SetTargets(Enumerable.Empty<Transform>());
     }
 
-    private List<SumoMovement> SpawnTeam(IList<SumoSetup> team, float x, Transform target, bool isLeftTeam)
+    private List<SumoMovement> SpawnTeam(IList<SumoSetup> team, Transform target, bool isLeftTeam)
     {
         List<SumoMovement> result = new List<SumoMovement>();
 
         for (int i = 0; i < team.Count; i++)
         {
-            float y = (i - (team.Count - 1) / 2f) * teamSpacing;
-            result.Add(AddSumo(team[i], new Vector3(x, y, 0f), target, isLeftTeam));
+            result.Add(AddSumo(team[i], GetSpawnPosition(i, team.Count, isLeftTeam), target, isLeftTeam));
         }
 
         return result;
+    }
+
+    private Vector3 GetSpawnPosition(int index, int count, bool isLeftTeam)
+    {
+        if (isLeftTeam)
+        {
+            float y = (index - (count - 1) / 2f) * teamSpacing;
+            return new Vector3(leftTeamX, y, 0f);
+        }
+
+        float t = count == 1 ? 0.5f : index / (float)(count - 1);
+        float angle = Mathf.Lerp(-arcAngle / 2f, arcAngle / 2f, t) * Mathf.Deg2Rad;
+        return arcCenter + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * arcRadius;
     }
 
     private SumoMovement AddSumo(SumoSetup setup, Vector3 spawnPosition, Transform target, bool isLeftTeam)

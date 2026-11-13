@@ -7,7 +7,7 @@ public class TournamentRoundPanel : UIPanel
 
     public void Display(string nextRoundName)
     {
-        nextRoundLabel.text = $"Prochain tour : {nextRoundName}";
+        nextRoundLabel.text = $"Next round: {nextRoundName}";
     }
 
     public void OnClickContinue() => GameFlowManager.Instance.ContinueTournament();
