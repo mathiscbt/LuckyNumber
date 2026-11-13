@@ -20,6 +20,9 @@ public class AiAction : MonoBehaviour
     private Vector2 areaCenter;
     private float dangerZoneMargin => areaRadius * dangerZoneRatio;
 
+    private float wanderTimer;
+    private Vector2 wanderDirection;
+
     private void Awake()
     {
         sumoMovement = GetComponent<SumoMovement>();
@@ -28,9 +31,15 @@ public class AiAction : MonoBehaviour
 
     private void Update()
     {
-        if (targetPlayer == null || (sumoHealth != null && sumoHealth.IsStunned))
+        if (sumoHealth != null && sumoHealth.IsStunned)
         {
             sumoMovement.SetMovementInput(Vector2.zero);
+            return;
+        }
+
+        if (targetPlayer == null)
+        {
+            Wander();
             return;
         }
 
@@ -50,7 +59,25 @@ public class AiAction : MonoBehaviour
         
         sumoMovement.SetMovementInput(desiredDirection);
 
-        EvaluateDashOpportunity(currentPos, dirToTarget, distanceToTarget, playerIsThreat);
+        EvaluateDashOpportunity(currentPos, dirToTarget, distanceToTarget, playerIsThreat, desiredDirection);
+    }
+
+    private void Wander()
+    {
+        wanderTimer -= Time.deltaTime;
+        if (wanderTimer <= 0f)
+        {
+            wanderTimer = Random.Range(1f, 2.5f);
+            wanderDirection = Random.value < 0.35f ? Vector2.zero : Random.insideUnitCircle.normalized;
+        }
+
+        Vector2 direction = wanderDirection;
+        if (areaRadius > 0f && Vector2.Distance(transform.position, areaCenter) > areaRadius * 0.8f)
+        {
+            direction = (areaCenter - (Vector2)transform.position).normalized;
+        }
+
+        sumoMovement.SetMovementInput(direction);
     }
 
     private Vector2 CalculateMovementDirection(Vector2 currentPos, Vector2 dirToTarget, float distanceToTarget, bool playerIsThreat)
@@ -96,9 +123,10 @@ public class AiAction : MonoBehaviour
         return dirToTarget;
     }
 
-    private void EvaluateDashOpportunity(Vector2 currentPos, Vector2 dirToTarget, float distanceToTarget, bool playerIsThreat)
+    private void EvaluateDashOpportunity(Vector2 currentPos, Vector2 dirToTarget, float distanceToTarget, bool playerIsThreat, Vector2 dashDirection)
     {
         if (sumoMovement.GetDashCooldownNormalized() > 0f) return;
+        if (!IsDashSafe(currentPos, dashDirection)) return;
 
         if (playerIsThreat)
         {
@@ -108,23 +136,21 @@ public class AiAction : MonoBehaviour
 
         if (distanceToTarget > maxDashDistance) return;
 
-        Vector2 currentFacing = transform.up;
-        float alignment = Vector2.Dot(currentFacing, dirToTarget);
+        float alignment = Vector2.Dot(transform.up, dirToTarget);
         if (alignment < dashAlignmentThreshold) return;
 
-        if (areaRadius > 0f && sumoMovement.SumoData != null)
-        {
-            float dashSpeed = sumoMovement.SumoData.dashForce / sumoMovement.SumoData.mass;
-            float estimatedDashDistance = dashSpeed * sumoMovement.SumoData.dashDuration;
-            Vector2 predictedEndPos = currentPos + (dirToTarget * estimatedDashDistance);
-
-            if (Vector2.Distance(predictedEndPos, areaCenter) >= (areaRadius - 0.5f))
-            {
-                return;
-            }
-        }
-
         sumoMovement.TryDash();
+    }
+
+    private bool IsDashSafe(Vector2 currentPos, Vector2 dashDirection)
+    {
+        if (areaRadius <= 0f || sumoMovement.SumoData == null) return true;
+
+        float dashSpeed = sumoMovement.SumoData.dashForce / sumoMovement.SumoData.mass;
+        float estimatedDashDistance = dashSpeed * sumoMovement.SumoData.dashDuration;
+        Vector2 predictedEndPos = currentPos + dashDirection.normalized * estimatedDashDistance;
+
+        return Vector2.Distance(predictedEndPos, areaCenter) < areaRadius - 0.5f;
     }
 
     public void SetTarget(Transform target)

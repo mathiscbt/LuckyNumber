@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad670d1adcf8be84f891f82b894c08a5, type: 3}
+  m_Name: Dash
+  m_EditorClassIdentifier: BroAudio::Ami.BroAudio.Data.AudioEntity
+  <ID>k__BackingField: 0
+  MulticlipsPlayMode: 2
+  _group: {fileID: 0}
+  Clips:
+  - AudioClip: {fileID: 8300000, guid: d253c3584b2c249eaac209b950e734f9, type: 3}
+    Volume: 1
+    Delay: 0
+    StartPosition: 0.058
+    EndPosition: 0.103
+    FadeIn: 0
+    FadeOut: 0
+    Weight: 0
+  - AudioClip: {fileID: 8300000, guid: b98d322b84eb14606a01731b76677ab8, type: 3}
+    Volume: 1
+    Delay: 0
+    StartPosition: 0.101
+    EndPosition: 0.09
+    FadeIn: 0
+    FadeOut: 0
+    Weight: 0
+  - AudioClip: {fileID: 8300000, guid: eb05237f9214c47018e0b42df41e8e19, type: 3}
+    Volume: 1
+    Delay: 0
+    StartPosition: 0.246
+    EndPosition: 0
+    FadeIn: 0
+    FadeOut: 0
+    Weight: 0
+  <AudioAsset>k__BackingField: {fileID: 11400000, guid: 338167da98d3e4e0ba908502d74f9dad, type: 2}
+  <AudioType>k__BackingField: 8
+  <MasterVolume>k__BackingField: 0.89425004
+  <Loop>k__BackingField: 0
+  <SeamlessLoop>k__BackingField: 0
+  <TransitionTime>k__BackingField: 0
+  <SpatialSetting>k__BackingField: {fileID: 0}
+  <Priority>k__BackingField: 128
+  <Pitch>k__BackingField: 1.1643
+  <PitchRandomRange>k__BackingField: 0.51719993
+  <VolumeRandomRange>k__BackingField: 0.21149987
+  <RandomFlags>k__BackingField: 3
+  <Flags>k__BackingField: 0
+  SeamlessTransitionType: 0
+  TransitionTempo:
+    BPM: 0
+    Beats: 0
+  SnapToFullVolume: 0

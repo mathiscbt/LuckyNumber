@@ -34,6 +34,19 @@ public class SumoVisuals : MonoBehaviour
 
     private SpriteRenderer[] childSprites;
 
+    [Header("Stun")]
+    [SerializeField] private float blinkInterval = 0.08f;
+    [SerializeField] private float stunnedAlpha = 0.25f;
+    private bool isBlinking;
+    private float blinkTimer;
+
+    [Header("Elimination")]
+    [SerializeField] private Vector3 eliminatedSquash = new Vector3(1.3f, 0.15f, 1f);
+    [SerializeField] private float squashDuration = 0.25f;
+    private Vector3 restScale;
+    private bool eliminated;
+    private Coroutine squashRoutine;
+
     private void Awake()
     {
         sumoMovement = GetComponent<SumoMovement>();
@@ -42,7 +55,7 @@ public class SumoVisuals : MonoBehaviour
 
         if (visualsRoot == null) visualsRoot = transform;
         childSprites = visualsRoot.GetComponentsInChildren<SpriteRenderer>(true);
-
+        restScale = visualsRoot.localScale;
     }
 
     private void OnEnable()
@@ -52,6 +65,7 @@ public class SumoVisuals : MonoBehaviour
             sumoMovement.StartDashing += StartGhosting;
             sumoMovement.EndDashing += StopGhosting;
             sumoMovement.OnScaleChange += AdaptToScale;
+            sumoMovement.OnEliminated += HandleEliminated;
 
             sumoMovement.StartWindup += () => animator.SetTrigger("SetWindup");
             sumoMovement.StartDashing += () => animator.SetTrigger("SetDash");
@@ -61,7 +75,71 @@ public class SumoVisuals : MonoBehaviour
         if (sumoHealth != null)
         {
             sumoHealth.OnHit += ReactToHit;
+            sumoHealth.OnStunned += HandleStunned;
+            sumoHealth.OnRecovered += HandleRecovered;
         }
+    }
+
+    private void HandleStunned(GameObject _)
+    {
+        if (eliminated) return;
+        isBlinking = true;
+        blinkTimer = 0f;
+    }
+
+    private void HandleRecovered(GameObject _)
+    {
+        isBlinking = false;
+        SetSpriteAlpha(1f);
+    }
+
+    private void HandleEliminated(GameObject _)
+    {
+        eliminated = true;
+        isBlinking = false;
+        SetSpriteAlpha(1f);
+
+        if (squashRoutine != null) StopCoroutine(squashRoutine);
+        squashRoutine = StartCoroutine(SquashRoutine());
+    }
+
+    private IEnumerator SquashRoutine()
+    {
+        Vector3 target = Vector3.Scale(restScale, eliminatedSquash);
+        float elapsed = 0f;
+
+        while (elapsed < squashDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / squashDuration);
+            float eased = 1f - (1f - t) * (1f - t);
+            visualsRoot.localScale = Vector3.LerpUnclamped(restScale, target, eased);
+            yield return null;
+        }
+
+        squashRoutine = null;
+    }
+
+    private void SetSpriteAlpha(float alpha)
+    {
+        if (childSprites == null) return;
+
+        foreach (SpriteRenderer sr in childSprites)
+        {
+            if (sr == null) continue;
+            Color c = sr.color;
+            c.a = alpha;
+            sr.color = c;
+        }
+    }
+
+    private void Update()
+    {
+        if (!isBlinking) return;
+
+        blinkTimer += Time.deltaTime;
+        bool visible = Mathf.FloorToInt(blinkTimer / blinkInterval) % 2 == 0;
+        SetSpriteAlpha(visible ? 1f : stunnedAlpha);
     }
 
     public void SetColor(Color color)
@@ -127,29 +205,7 @@ public class SumoVisuals : MonoBehaviour
             spawnedRenderers.Add(sr);
         }
 
-        StartCoroutine(FadeAndDestroy(ghostRoot, spawnedRenderers));
-    }
-
-    private IEnumerator FadeAndDestroy(GameObject root, List<SpriteRenderer> renderers)
-    {
-        float elapsed = 0f;
-        float startAlpha = ghostColor.a;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float currentAlpha = Mathf.Lerp(startAlpha, 0f, elapsed / fadeDuration);
-            Color c = new Color(ghostColor.r, ghostColor.g, ghostColor.b, currentAlpha);
-
-            for (int i = 0; i < renderers.Count; i++)
-            {
-                if (renderers[i] != null) renderers[i].color = c;
-            }
-
-            yield return null;
-        }
-
-        Destroy(root);
+        ghostRoot.AddComponent<DashGhost>().Init(spawnedRenderers, ghostColor, fadeDuration);
     }
 
 
@@ -157,7 +213,18 @@ public class SumoVisuals : MonoBehaviour
 
     private void AdaptToScale(float newScale)
     {
+        eliminated = false;
+        isBlinking = false;
 
+        if (squashRoutine != null)
+        {
+            StopCoroutine(squashRoutine);
+            squashRoutine = null;
+        }
+
+        if (visualsRoot == transform) restScale = Vector3.one * newScale;
+        visualsRoot.localScale = restScale;
+        SetSpriteAlpha(1f);
     }
 
 
@@ -210,11 +277,14 @@ public class SumoVisuals : MonoBehaviour
             sumoMovement.StartDashing -= StartGhosting;
             sumoMovement.EndDashing -= StopGhosting;
             sumoMovement.OnScaleChange -= AdaptToScale;
+            sumoMovement.OnEliminated -= HandleEliminated;
         }
 
         if (sumoHealth != null)
         {
             sumoHealth.OnHit -= ReactToHit;
+            sumoHealth.OnStunned -= HandleStunned;
+            sumoHealth.OnRecovered -= HandleRecovered;
         }
     }
 }

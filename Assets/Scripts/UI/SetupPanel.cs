@@ -8,6 +8,13 @@ public class SetupPanel : UIPanel
     [SerializeField] private GameObject difficultyRoot;
     [SerializeField] private Button confirmButton;
 
+    private readonly SelectionHighlighter highlighter = new SelectionHighlighter();
+
+    private void Awake()
+    {
+        highlighter.Wire(transform);
+    }
+
     private void Update()
     {
         bool playerTwoReady = !playerTwo.gameObject.activeSelf || playerTwo.IsComplete;
@@ -18,6 +25,7 @@ public class SetupPanel : UIPanel
     {
         playerTwo.gameObject.SetActive(isLocalMulti);
         difficultyRoot.SetActive(!isLocalMulti);
+        highlighter.Select("OnClickNormal");
     }
 
     public SumoSetup BuildPlayerOne(ControlScheme controls) => playerOne.Build(controls);

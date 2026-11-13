@@ -9,7 +9,6 @@ public class SumoCamera : MonoBehaviour
     
     private CinemachineTargetGroup targetGroup;
     [SerializeField] private Transform arenaCenter;
-    [SerializeField] private float arenaCenterWeight = 0.5f;
 
     private void Awake()
     {

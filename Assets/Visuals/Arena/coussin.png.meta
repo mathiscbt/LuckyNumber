@@ -1,0 +1,560 @@
+fileFormatVersion: 2
+guid: bd3e90d14be674d8b90de52f401296a7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2399198500615089489
+    second: coussin_0
+  - first:
+      213: 5094977013263829173
+    second: coussin_1
+  - first:
+      213: -5322474654933681757
+    second: coussin_2
+  - first:
+      213: 1958426705905057932
+    second: coussin_3
+  - first:
+      213: -729981940829987781
+    second: coussin_4
+  - first:
+      213: 6551239894803637700
+    second: coussin_5
+  - first:
+      213: -2565026797498003623
+    second: coussin_6
+  - first:
+      213: -1597191009120694282
+    second: coussin_7
+  - first:
+      213: -6290474007353779942
+    second: coussin_8
+  - first:
+      213: -7048528235422184115
+    second: coussin_9
+  - first:
+      213: 2801219943183185202
+    second: coussin_10
+  - first:
+      213: -2617155666257853228
+    second: coussin_11
+  - first:
+      213: -5258193980168978238
+    second: coussin_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: coussin_0
+      rect:
+        serializedVersion: 2
+        x: 2454
+        y: 6251
+        width: 742
+        height: 716
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15defc6235aab4120800000000000000
+      internalID: 2399198500615089489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_1
+      rect:
+        serializedVersion: 2
+        x: 3424
+        y: 6235
+        width: 815
+        height: 787
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b80f56699ef4b640800000000000000
+      internalID: 5094977013263829173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_2
+      rect:
+        serializedVersion: 2
+        x: 4510
+        y: 6290
+        width: 675
+        height: 652
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a978a24085c226b0800000000000000
+      internalID: -5322474654933681757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_3
+      rect:
+        serializedVersion: 2
+        x: 5991
+        y: 6716
+        width: 742
+        height: 716
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c800c1c76babd2b10800000000000000
+      internalID: 1958426705905057932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_4
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 4697
+        width: 652
+        height: 630
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3cd06cda459ed5f0800000000000000
+      internalID: -729981940829987781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_5
+      rect:
+        serializedVersion: 2
+        x: 6113
+        y: 4503
+        width: 742
+        height: 716
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c5632079fdaaea50800000000000000
+      internalID: 6551239894803637700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_6
+      rect:
+        serializedVersion: 2
+        x: 6170
+        y: 3798
+        width: 653
+        height: 629
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95f06cfb7b1376cd0800000000000000
+      internalID: -2565026797498003623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_7
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 2078
+        width: 897
+        height: 865
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ffc9ee4d33a5d9e0800000000000000
+      internalID: -1597191009120694282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_8
+      rect:
+        serializedVersion: 2
+        x: 6208
+        y: 2506
+        width: 653
+        height: 630
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1999daf73fb3b8a0800000000000000
+      internalID: -6290474007353779942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_9
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 435
+        width: 816
+        height: 786
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4d89522ae89e2e90800000000000000
+      internalID: -7048528235422184115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_10
+      rect:
+        serializedVersion: 2
+        x: 2044
+        y: 412
+        width: 742
+        height: 716
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2357c2362beefd620800000000000000
+      internalID: 2801219943183185202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_11
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 353
+        width: 897
+        height: 865
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d4cccea9cefdabd0800000000000000
+      internalID: -2617155666257853228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_12
+      rect:
+        serializedVersion: 2
+        x: 5713
+        y: 346
+        width: 969
+        height: 934
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c04ee32f642707b0800000000000000
+      internalID: -5258193980168978238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_13
+      rect:
+        serializedVersion: 2
+        x: 2238
+        y: 6087
+        width: 3160
+        height: 1088
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89078c14c3cf34610b562d8531876865
+      internalID: 1818490919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_14
+      rect:
+        serializedVersion: 2
+        x: 5872
+        y: 2441
+        width: 1146
+        height: 3032
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a58b231e6b44a4e9eb1401d54968cabe
+      internalID: 1697807862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_15
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 241
+        width: 7003
+        height: 1540
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 030c57523a6384b5b9ebee132c3847eb
+      internalID: 341512318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coussin_16
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 1943
+        width: 1239
+        height: 3750
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a3295b94b6584d2cb5ad3ff9d5072ab
+      internalID: -2130708860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      coussin_0: 2399198500615089489
+      coussin_1: 5094977013263829173
+      coussin_10: 2801219943183185202
+      coussin_11: -2617155666257853228
+      coussin_12: -5258193980168978238
+      coussin_13: 1818490919
+      coussin_14: 1697807862
+      coussin_15: 341512318
+      coussin_16: -2130708860
+      coussin_2: -5322474654933681757
+      coussin_3: 1958426705905057932
+      coussin_4: -729981940829987781
+      coussin_5: 6551239894803637700
+      coussin_6: -2565026797498003623
+      coussin_7: -1597191009120694282
+      coussin_8: -6290474007353779942
+      coussin_9: -7048528235422184115
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

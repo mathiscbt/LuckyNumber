@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.05324912, a: 0.20784314}
+  m_Color: {r: 0, g: 1, b: 0.05324912, a: 0.5411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -687,6 +687,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SumoMovement
   baseDashDamage: 25
   rotationSpeed: 10
+  dashSound:
+    _entity: {fileID: 11400000, guid: 83c8e9feddfad43e193d82f1fe85f73b, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 5312625954393773784}
+  hitSound:
+    _entity: {fileID: 11400000, guid: 7fa37d9f64127496482a8695e92e8e39, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 5312625954393773784}
+  fallSound:
+    _entity: {fileID: 11400000, guid: cc77dca5478c740f5b7ee586a219c57c, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 5312625954393773784}
 --- !u!58 &387736656439624644
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -776,6 +788,10 @@ MonoBehaviour:
   spawnInterval: 0.06
   fadeDuration: 0.2
   orderOffset: -5
+  blinkInterval: 0.08
+  stunnedAlpha: 0.25
+  eliminatedSquash: {x: 1.3, y: 0.7, z: 1}
+  squashDuration: 0.25
 --- !u!114 &5901650067824995083
 MonoBehaviour:
   m_ObjectHideFlags: 0

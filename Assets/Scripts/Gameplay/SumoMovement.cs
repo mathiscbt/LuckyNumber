@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Ami.BroAudio;
+using Ami.BroAudio.Runtime;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -30,6 +32,11 @@ public class SumoMovement : MonoBehaviour
     public event Action EndDashing;
     public event Action<float> OnScaleChange;
     public SumoData SumoData {get; private set;}
+
+    [Header("Audio")]
+    [SerializeField] private SoundID dashSound;
+    [SerializeField] private SoundID hitSound;
+    [SerializeField] private SoundID fallSound;
 
     void Awake()
     {
@@ -72,11 +79,12 @@ public class SumoMovement : MonoBehaviour
         
         if (isStunned)
         {
+            if (currentState != SumoState.Normal) EndDashing?.Invoke();
             currentState = SumoState.Normal;
             rb.mass = 1f; 
             rb.linearDamping = 1f;
         }
-        else
+        else if (ready)
         {
             RefreshData();
         }
@@ -105,12 +113,14 @@ public class SumoMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!ready || isStunned) return;
+        if (!ready) return;
 
         if (dashCooldown > 0f)
         {
             dashCooldown -= Time.deltaTime;
         }
+
+        if (isStunned) return;
 
         if (currentState != SumoState.Normal)
         {
@@ -123,6 +133,7 @@ public class SumoMovement : MonoBehaviour
                     dashTimer = SumoData.dashDuration;
                     needsDashImpulse = true;
                     hitByDash.Clear();
+                    PlaySfx(dashSound);
                     StartDashing?.Invoke();
                 }
             }
@@ -189,16 +200,36 @@ public class SumoMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) => TryAttackVictim(collision.gameObject);
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent<SumoMovement>(out var otherSumo))
+        {
+            if (GetInstanceID() < otherSumo.GetInstanceID())
+            {
+                PlaySfx(hitSound);
+            }
+        }
+        TryAttackVictim(collision.gameObject);
+    }
     private void OnCollisionStay2D(Collision2D collision) => TryAttackVictim(collision.gameObject);
 
     public void Eliminate()
     {
+        if (!ready || !isActiveAndEnabled) return;
+
+        ready = false;
         OnEliminated?.Invoke(gameObject);
         rb.linearVelocity = Vector2.zero;
-        ready = false;
+        rb.angularVelocity = 0f;
+        rb.freezeRotation = true;
+        PlaySfx(fallSound);
         SumoCamera.Instance?.RemoveTarget(transform);
         //Destroy(gameObject);
+    }
+
+    private static void PlaySfx(SoundID id)
+    {
+        if (SoundManager.HasInstance) BroAudio.Play(id);
     }
 
     public void ResetState()
@@ -216,5 +247,6 @@ public class SumoMovement : MonoBehaviour
         RefreshData();
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
+        rb.freezeRotation = false;
     }
 }

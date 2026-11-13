@@ -15,6 +15,13 @@ public class SumoUI : MonoBehaviour
         sumoMovement = GetComponent<SumoMovement>();
         sumoHealth = GetComponent<SumoHealth>();
         sumoHealth.OnHealthPercentChange += UpdateHealthFill;
+        sumoMovement.OnEliminated += HandleEliminated;
+    }
+
+    private void HandleEliminated(GameObject _)
+    {
+        if (dashCooldownFill != null) dashCooldownFill.enabled = false;
+        if (healthFill != null) healthFill.enabled = false;
     }
     void Update()
     {
@@ -30,6 +37,7 @@ public class SumoUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        sumoHealth.OnHealthPercentChange -= UpdateHealthFill;
+        if (sumoHealth != null) sumoHealth.OnHealthPercentChange -= UpdateHealthFill;
+        if (sumoMovement != null) sumoMovement.OnEliminated -= HandleEliminated;
     }
 }

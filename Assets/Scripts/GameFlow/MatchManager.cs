@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Ami.BroAudio;
 
 public class MatchManager : MonoBehaviour
 {
     [SerializeField] private SumoBalanceConfig balanceConfig;
+    [SerializeField] private SoundID fightStartSound;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject aiPrefab;
     [SerializeField] private Collider2D areaCollider;
@@ -32,6 +34,7 @@ public class MatchManager : MonoBehaviour
         SpawnTeam(rightTeam, left[0].transform, false);
 
         SumoCamera.Instance?.SetTargets(spawned.Select(sumo => sumo.transform));
+        BroAudio.Play(fightStartSound);
     }
 
     public void EndGame()
@@ -103,13 +106,33 @@ public class MatchManager : MonoBehaviour
     private void HandleElimination(GameObject eliminatedSumo)
     {
         SumoMovement sumo = eliminatedSumo.GetComponent<SumoMovement>();
-        if (fightOver || sumo == null || !aliveSumos.Remove(sumo)) return;
+        if (sumo == null || !aliveSumos.Remove(sumo)) return;
+
+        if (fightOver)
+        {
+            ResetSurvivorsTargets();
+            return;
+        }
 
         bool leftRemaining = aliveSumos.ContainsValue(true);
         bool rightRemaining = aliveSumos.ContainsValue(false);
         if (leftRemaining && rightRemaining) return;
 
         fightOver = true;
+        ResetSurvivorsTargets();
         OnFightEnded?.Invoke(leftRemaining);
+    }
+
+    private void ResetSurvivorsTargets()
+    {
+        List<SumoMovement> survivors = aliveSumos.Keys.ToList();
+        foreach (SumoMovement sumo in survivors)
+        {
+            AiAction ai = sumo.GetComponent<AiAction>();
+            if (ai == null) continue;
+
+            List<SumoMovement> others = survivors.Where(other => other != sumo && other.GetComponent<AiAction>() != null).ToList();
+            ai.SetTarget(others.Count > 0 ? others[UnityEngine.Random.Range(0, others.Count)].transform : null);
+        }
     }
 }
