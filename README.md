@@ -1,5 +1,7 @@
 # Lucky Number
 
+![Demo gif](icons/gif3.gif)
+
 A cozy percussive 2D arcade sumo brawler made in Unity.
 
 Step into the arena! *Push*, *bounce*, and *outmaneuver* your opponent to knock them out. Whether you want to test your skills in a **Tournament** or challenge a friend in **2-Player Local Mode**, every match is a fast-paced, physics-driven showdown.
@@ -10,6 +12,7 @@ Before entering the arena, **your fate is decided by your Lucky Number.**
 
 It dynamically shapes your sumo wrestler's **10 core attributes**: *Weight*, *Size*, *Aura*, *Force*, *Stamina*, *Cooldown*, *Awkwardness*, *Fatigue*, *Inertia*, and *Delay*. Will your lucky number turn you into an immovable giant or an agile fighter? Adapt your playstyle to your number and claim victory!
 
+![Stats gif](icons/gif2.gif)
 ---
 
 ## Game modes
@@ -32,6 +35,8 @@ It dynamically shapes your sumo wrestler's **10 core attributes**: *Weight*, *Si
 |---|---|---|
 | **Move** | WASD / ZQSD | Arrow Keys |
 | **Dash** | SpaceBar | Right Shift |
+
+![Gameplay gif](icons/gif1.gif)
 
 ## Credits & assets
 
