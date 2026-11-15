@@ -1,4 +1,6 @@
-# Lucky Number
+# Knock Konck!
+
+[Try the game on itch.io](https://mathiscblt.itch.io/knock-knock)
 
 ![Demo gif](icons/gif3.gif)
 
